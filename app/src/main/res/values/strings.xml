@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ToDoList</string>
+    <string name="title_activity_add_event">Добавление события</string>
+    <string-array name="spinner_choices">
+        <item>Все</item>
+        <item>Решенные</item>
+        <item>Нерешенные</item>
+    </string-array>
+</resources>

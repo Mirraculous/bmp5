@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main_spinner"
+        android:title="Item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actionViewClass="android.widget.Spinner"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/itemAddEvent"
+        android:icon="@android:drawable/ic_input_add"
+        android:title="Добавить"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_btn_sort"
+        android:icon="@android:drawable/checkbox_off_background"
+        android:title="Сортировка"
+        app:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_btn_del_solved"
+        android:title="Удалить решенные" />
+</menu>
