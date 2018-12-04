@@ -30,7 +30,6 @@ public class EventInfoActivity extends AppCompatActivity
     ImageButton btn_date;
     CheckBox cb_solved;
     UserEvent event;
-    //int day, month, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +45,17 @@ public class EventInfoActivity extends AppCompatActivity
         cb_solved = findViewById(R.id.cb_einfo_solved);
         tv_name.setText(event.name);
         tv_comment.setText(event.Comment);
-        tv_date.setText(event.day + "." + event.month + "." + event.year);
+        tv_date.setText(event.day + "." + event.month + "." + event.year); //впадлу переделать на календарь
         cb_solved.setChecked(event.isFinished);
         cb_solved.setOnCheckedChangeListener(this);
         btn_date = findViewById(R.id.einfo_btn_date);
         btn_date.setOnClickListener(this);
         tv_id = findViewById(R.id.tv_einfo_id);
-        tv_id.setText("id: " + event.id);
+        tv_id.setText("id: " + event.id); //просто для наглядности
         ChangeEditables();
     }
 
-    void ChangeEditables()
+    void ChangeEditables() //отключение полей если solved
     {
         if (event.isFinished) {
             tv_name.setInputType(InputType.TYPE_NULL);

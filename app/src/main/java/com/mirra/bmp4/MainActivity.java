@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ListIterator;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,
-        ItemClickListener, Saver, AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements ItemClickListener,
+        Saver, AdapterView.OnItemSelectedListener {
 
     ArrayList<UserEvent> events, eventsFiltered;
     RecyclerView rv;
@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         rv = findViewById(R.id.rv_main);
 
-
-
         rvlm = new LinearLayoutManager(this);
         ((LinearLayoutManager) rvlm).setReverseLayout(true);
         ((LinearLayoutManager) rvlm).setStackFromEnd(true);
@@ -65,18 +63,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         rva.setOnItemClickListener(this);
         rva.saver = this;
         rv.setAdapter(rva);
-
-        //gson test
-//        events.add(new UserEvent("imya", 29, 1, 2018, true, "kek"));
-//        Gson gson = new Gson();
-//        String json = gson.toJson(events);
-//        Toast.makeText(this, json, Toast.LENGTH_SHORT).show();
-//        events = gson.fromJson(json, new TypeToken<ArrayList<UserEvent>>(){}.getType());
-
-
     }
 
-    void CreateFile() //and read
+    void CreateFile() //создание файла или получение инфы из имеющегося
     {
         File storage = new File(getFilesDir(), filename);
         if (!storage.exists())
@@ -147,6 +136,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    void PerformSort()
+    {
+        MenuItem btn = menu.findItem(R.id.menu_btn_sort);
+        if (sortMode == 0)
+        {
+            Collections.sort(eventsFiltered, new UserEvent.IdComparator());
+            rva.notifyDataSetChanged();
+            btn.setIcon(android.R.drawable.checkbox_off_background);
+            btn.setTitle("Сортировка ✘");
+        }
+        else
+        {
+            Collections.sort(eventsFiltered, new UserEvent.DateComparator());
+            rva.notifyDataSetChanged();
+            btn.setIcon(android.R.drawable.checkbox_on_background);
+            btn.setTitle("Сортировка ✓");
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -155,10 +163,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         spinner = (Spinner) menu.findItem(R.id.main_spinner).getActionView();
         if (spinner == null)
             Log.d("log1", "spinner proeban");
-
-//        ArrayAdapter<String> ada = new ArrayAdapter<>(this,
-//                R.layout.spinner_elem,
-//                getResources().getStringArray(R.array.spinner_choices));
         ArrayAdapter<CharSequence> ada = ArrayAdapter.createFromResource(this,
                 R.array.spinner_choices, R.layout.spinner_elem);
         ada.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -196,25 +200,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    void PerformSort()
-    {
-        MenuItem btn = menu.findItem(R.id.menu_btn_sort);
-        if (sortMode == 0)
-        {
-            Collections.sort(eventsFiltered, new UserEvent.IdComparator());
-            rva.notifyDataSetChanged();
-            btn.setIcon(android.R.drawable.checkbox_off_background);
-            btn.setTitle("Сортировка ✘");
-        }
-        else
-        {
-            Collections.sort(eventsFiltered, new UserEvent.DateComparator());
-            rva.notifyDataSetChanged();
-            btn.setIcon(android.R.drawable.checkbox_on_background);
-            btn.setTitle("Сортировка ✓");
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (data == null || resultCode != RESULT_OK)
@@ -228,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
         SaveToFile();
-        if (spinner.getSelectedItemPosition() != 0 || sortMode != 0)
+        if (spinner.getSelectedItemPosition() != 0 || sortMode != 0) //resort & refilter
             onItemSelected(null, null,
                     spinner.getSelectedItemPosition(), spinner.getSelectedItemId());
         super.onActivityResult(requestCode, resultCode, data);
@@ -275,11 +260,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onClick(View v) {
-
-    }
-
-    @Override
     public void OnItemClick(View v, int position) {
         Intent intent = new Intent(this, EventInfoActivity.class);
         intent.putExtra("event", events.get(position));
@@ -307,7 +287,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         eventsFiltered.add(event);
                 break;
         }
-        PerformSort();
+        PerformSort(); //resort after filtering
         rva.events = eventsFiltered;
         rva.notifyDataSetChanged();
     }

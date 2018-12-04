@@ -32,16 +32,6 @@ interface Saver {
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHolder>
         implements CheckedChangedItemListener{
 
-    @Override
-    public void OnCheckedChanged(boolean checked, int position) {
-        events.get(position).isFinished = checked;
-        if (!binding) {
-            notifyItemChanged(position);
-            if (saver != null)
-                saver.SaveToFile();
-        }
-    }
-
     class EventViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
         CompoundButton.OnCheckedChangeListener {
 
@@ -102,6 +92,8 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     boolean binding = false;
     Saver saver;
 
+
+
     public EventAdapter(ArrayList<UserEvent> events)
     {
         this.events = events;
@@ -110,6 +102,16 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.EventViewHol
     public void setOnItemClickListener(ItemClickListener listener)
     {
         this.listener = listener;
+    }
+
+    @Override
+    public void OnCheckedChanged(boolean checked, int position) {
+        events.get(position).isFinished = checked;
+        if (!binding) { //без проверки будем зацикливаться при бинде холдера
+            notifyItemChanged(position);
+            if (saver != null)
+                saver.SaveToFile();
+        }
     }
 
     @NonNull
