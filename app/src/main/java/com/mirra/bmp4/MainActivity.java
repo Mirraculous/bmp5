@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         rva.setOnItemClickListener(this);
         rva.saver = this;
         rv.setAdapter(rva);
+        eventsFiltered = events;
     }
 
     void CreateFile() //создание файла или получение инфы из имеющегося
@@ -262,7 +263,8 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
     @Override
     public void OnItemClick(View v, int position) {
         Intent intent = new Intent(this, EventInfoActivity.class);
-        intent.putExtra("event", events.get(position));
+        int i = events.indexOf(rva.events.get(position));
+        intent.putExtra("event", events.get(i));
         startActivityForResult(intent, 2);
     }
 
