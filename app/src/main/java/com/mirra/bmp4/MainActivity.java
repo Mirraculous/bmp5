@@ -162,8 +162,6 @@ public class MainActivity extends AppCompatActivity implements ItemClickListener
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         spinner = (Spinner) menu.findItem(R.id.main_spinner).getActionView();
-        if (spinner == null)
-            Log.d("log1", "spinner proeban");
         ArrayAdapter<CharSequence> ada = ArrayAdapter.createFromResource(this,
                 R.array.spinner_choices, R.layout.spinner_elem);
         ada.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
